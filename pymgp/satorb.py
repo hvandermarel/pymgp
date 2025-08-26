@@ -87,7 +87,7 @@ Copyright Hans van der Marel, Delft University of Technology, 2010-2024
 # Import modules
 
 import numpy as np
-from crstrans import xyz2plh
+from pymgp.crstrans import xyz2plh
 from datetime import datetime
 
 # ----------------------------------------------------------------------------

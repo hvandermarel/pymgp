@@ -106,7 +106,7 @@ import matplotlib.dates as mdates
 from matplotlib.markers import MarkerStyle
 from matplotlib.transforms import Affine2D
 from scipy.io import loadmat
-from satorb import ut2gmst, num2datetime
+from pymgp.satorb import ut2gmst, num2datetime
 
 
 # ----------------------------------------------------------------------------

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pymgp"
+version = "0.9.0"
+authors = [
+  { name="Hans van der Marel", email="h.vandermarel@tudelft.nl" },
+]
+description = "Collection of Python modules for GNSS Positioning and Geodesy by TU Delft"
+readme = "README.md"
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "scipy",
+]
+requires-python = ">=3.5"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "Apache-2.0"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/hvandermarel/pymgp"
+Documentation = "https://github.com/hvandermarel/pymgp/docs"
+Repository = "https://github.com/hvandermarel/pymgp.git"
+Issues = "https://github.com/hvandermarel/pymgp/issues"
+Changelog = "https://github.com/hvandermarel/pymgp/blob/master/CHANGELOG.md"

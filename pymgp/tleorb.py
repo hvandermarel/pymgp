@@ -142,7 +142,7 @@ import urllib.request as url
 from datetime import datetime
 from dateutil.parser import parse as parsedate
 import ssl
-from satorb import keplerm, orb2vec, datetime2num
+from pymgp.satorb import keplerm, orb2vec, datetime2num
 
 ctx = ssl.create_default_context()
 ctx.check_hostname = False
