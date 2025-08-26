@@ -8,6 +8,6 @@ Notebooks with examples
    :maxdepth: 2
    :caption: Contents:
 
-   notebooks/
+   notebooks/orbplot_scratch.ipynb
    
    
