@@ -8,7 +8,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('./'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 project = 'pyMGP'
 copyright = '2025, Hans van der Marel'
@@ -29,7 +29,7 @@ extensions = [
 ]
 
 
-autosummary_generate = False
+autosummary_generate = True
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -44,3 +44,5 @@ html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 
 html_show_sourcelink = False
+
+autodoc_mock_imports = ["numpy", "pymgp"]
