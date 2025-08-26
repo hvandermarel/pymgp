@@ -1607,6 +1607,11 @@ def printcrd(crd, prtfmt="xyz", labels=[], sdcov=[], sdcovfmt="std", unit='rad/m
         Units of input `crd` array, , default 'rad/m'.
     title : str, optional
         Optional title string.
+
+    Returns
+    -------
+    None
+        Nothing to return.
         
     Examples
     --------
@@ -1760,6 +1765,11 @@ def printxyz(xyz):
     xyz : array_like with shape (...,3) 
         Cartesian coordinates.
 
+    Returns
+    -------
+    None
+        Nothing to return.
+        
     Examples
     --------
     >>> printxyz([4123456.23000, 0.3, 0.123451])
@@ -1783,6 +1793,11 @@ def printplh(plh, unit='rad/m'):
     unit : {'rad/m', 'deg/m', 'rad', 'deg'},  default = 'rad/m'
         Units for the input latitude and longitude (and height).
 
+    Returns
+    -------
+    None
+        Nothing to return.
+        
     Notes
     -----
     One degree is about 111 km, one millidegree (10^-3) is about 111 m, one micro degree 
@@ -1822,6 +1837,12 @@ def deg2dms(value, pretty=False, unit='rad'):
         Unit of the values (only 'rad' and 'deg' are meaningful).
     pretty : boolean, optional, default=False
         Pretty print with degree, minute and second symbol.
+
+    Returns
+    -------
+    dms : str
+        Sring with output in dms format.
+
         
     Notes
     -----
