@@ -17,7 +17,7 @@ Contents
 
    usage
    api
-   examples
+   
    release
 
 

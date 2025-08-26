@@ -1,2 +1,2 @@
-nbsphinx
-pydata-sphinx-theme
+# nbsphinx
+# pydata-sphinx-theme
