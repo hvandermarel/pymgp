@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "van der Marel"
+  given-names: "Hans"
+  orcid: "https://orcid.org/0000-0002-0678-8068"
+title: "pyMGP - Collection of Python modules for GNSS Positioning and Geodesy."
+version: 0.9
+doi: 
+date-released: 
+url: "https://github.com/hvandermarel/pymgp"
