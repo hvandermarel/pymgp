@@ -46,4 +46,4 @@ html_static_path = ['_static']
 
 html_show_sourcelink = False
 
-autodoc_mock_imports = ["matplotlib", "scipy", "datetime", "collections", "urllib", "ssl", "dateutil"]
+# autodoc_mock_imports = ["scipy", "datetime", "urllib", "ssl", "dateutil"]
