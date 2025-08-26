@@ -39,7 +39,7 @@ Notes
 High level functions can be called multiple times to plot more than one satellite
 and several (but not all) support multidimension arrays for plotting multiple satellites.
 
-See also
+See Also
 --------
 satorb:
     Satellite orbit module (used by this module)
@@ -90,6 +90,8 @@ Modified:   12 Nov 2020 by Hans van der Marel and Simon van Diepen
                plots
              9 Aug 2024 by Hans van der Marel
              - updated docstrings to numpy style
+            22 Aug 2024 by Hans van der Marel
+             - Major edits to the docstrings to facilitate sphynx
                                              
 Based on code originally developed for Matlab(TM) in 2012-2016 by the author.
 
@@ -136,7 +138,7 @@ from satorb import ut2gmst, num2datetime
     xsat, vsat : array_like, float, shape (...,n,3)
         Array with Cartesian X, Y, Z satellite coordinates (m) and velocities 
         (m/s) in the reference system given by `crs`.
-    xobj: array_like, float, shape(3,) or (n,3)
+    xobj : array_like, float, shape(3,) or (n,3)
         Array with the Cartesian X, Y, Z object coordinates (m) in the reference 
         system given by `crs`.
     crs : {'ECI', 'ECEF'}, optional
@@ -157,7 +159,7 @@ from satorb import ut2gmst, num2datetime
 
     ax:
     
-    kwargs: optional
+    **kwargs : optional
         Any other matplotlib parameter 
 
     Other parameters
@@ -461,7 +463,7 @@ def pltsattrack(t, xsat, satid="", xobj=None, llhobj=None, cutoff=0, stamps=[3, 
 
 def pltgroundtrack(t, xsate, satid="", xobje=None, llhobj=None, cutoff=0, stamps=[3, 1, 5], rsopt=[True, True],
          ax=None, figsize=(10,6), color=None, hlcolor=None, fontsize="small", **kwargs):
-    """ Plot satellite ground track(s).
+    """Plot satellite ground track(s).
     
     pltgroundtrack(xsate, ...) plot the satellite ground track for a satellite
     with in xsate the Cartesian ECEF coordinates. xsate must be a ndarray with 
@@ -481,13 +483,13 @@ def pltgroundtrack(t, xsate, satid="", xobje=None, llhobj=None, cutoff=0, stamps
     If you want multiple satellites to be plotted call this function 
     repeatedly for the different satellites, like in the example below.
     
-    Example:
-
-       plt.figure("Ground tracks")
-       pltgroundtrack((sat1, dsat), visible=visible, satid=satid)
-       pltgroundtrack(xsate, satid=satid,linewidth=0.5)
-       plt.title("Ground tracks for two satellites.")
-       plt.legend() 
+    Example
+    -------
+    >>> plt.figure("Ground tracks")
+    >>> pltgroundtrack((sat1, dsat), visible=visible, satid=satid)
+    >>> pltgroundtrack(xsate, satid=satid,linewidth=0.5)
+    >>> plt.title("Ground tracks for two satellites.")
+    >>> plt.legend() 
 
     See also tleread, tle2vec and eci2ecef.
     """
@@ -641,7 +643,7 @@ def pltgroundtrack(t, xsate, satid="", xobje=None, llhobj=None, cutoff=0, stamps
 
 
 def skyplot(t, azi, zen, cutoff=0, satnames=[], ax=None, figsize=(10,6)):
-    """ Skyplot (polar plot) with elevation and azimuth of satellite(s).
+    """Skyplot (polar plot) with elevation and azimuth of satellite(s).
     
     skyplot(t,azi,zen) creates a polar plot with the elevation and 
     azimuth of a satellite. t is an array with the time as datenumbers, azi 
@@ -651,9 +653,11 @@ def skyplot(t, azi, zen, cutoff=0, satnames=[], ax=None, figsize=(10,6)):
     i.e.  ntimes, nsat = zen.shape . The optional parameter cutoff is the 
     cutoff elevation (degrees) for plotting the trajectories, the default is
     0 degrees (the local horizon). 
-
+    """
+    
+    """
     Example:
-
+        
        tlegps = tleread('gps.txt','verbose',0)
        t = tledatenum(['2017-11-30',24*60,1])
 
@@ -868,18 +872,18 @@ def plt3dorbit(t, xsat, satid="", xobj=None, llhobj=None, ax=None, figsize=(10,6
 # ----------------------------------------------------------------------------
 
 def plot_orbit_3D(ax, xsat, xobj=None):
-    """
-    Plots 3d orbits of satellites around the Earth
-    """
+    """Plot 3d orbits of satellites around the Earth."""
 
     def set_axes_equal(ax):
-        '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
+        """Make spheres appear as spheres.
+        
+        Make axes of 3D plot have equal scale so that spheres appear as spheres,
         cubes as cubes, etc..  This is one possible solution to Matplotlib's
         ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
 
         Input
           ax: a matplotlib axis, e.g., as output from plt.gca().
-        '''
+        """
 
         x_limits = ax.get_xlim3d()
         y_limits = ax.get_ylim3d()
@@ -936,14 +940,16 @@ def plot_orbit_3D(ax, xsat, xobj=None):
 # ----------------------------------------------------------------------------
     
 def rewrap(t, x, method="rewrap", wrapat=[0,360], verbose=0):
-    """Rewrap cyclic data for plotting line segments
+    """Rewrap cyclic data for plotting line segments.
     
     Re-wrap cyclic data and insert breaks in lines so that when plotted the lines
     are properly terminated at the borders of the wrapping region. This function 
     solves two issues with plotting lines for cyclic data: 
+        
     - the near vertical (or horizontal) line segments at the wraps, 
     - lines do not extend to the wrapping boundaries (instead they take the opposite 
       direction)
+    
     If unsolved, line plots on cyclic data can be misleading or unclear at best, while
     a scatter plot may not provide all the information.
     
@@ -951,9 +957,9 @@ def rewrap(t, x, method="rewrap", wrapat=[0,360], verbose=0):
 
     Parameters
     ----------
-    t, x: array_like, float
+    t, x : array_like, float
         The absissae (time) and ordinates (data)
-    method: {'rewrap', 'unwrap', split', rewrap_nosplit'}, optional
+    method : {'rewrap', 'unwrap', split', rewrap_nosplit'}, optional
         The rewrapping method. Defines what action is taken at a data wrap 
             - rewrap : estimate time of wrap by interpolation from the data, and insert 
                    the upper/lower wrap limits and 'np.nan' to cause a split in the line. 
@@ -965,16 +971,16 @@ def rewrap(t, x, method="rewrap", wrapat=[0,360], verbose=0):
             - split : split the lines at a wrap by inserting 'np.nan'. The output arrays 
                    are larger than the the input arrays (1 additional data point per wrap)
             - unwrap : make the data continuous. The length of the arrays is unchanged 
-    wrapat: list, optional
+    wrapat : list, optional
         List with the lower and upper wrap boundaries.
-    verbose: int, optional
+    verbose : int, optional
         Vebosity level.
 
     Returns
     -------
-    tout, xout: ndarray, float
+    tout, xout : ndarray, float
         The absissae (time) and rewrapped ordinates (data) for plotting
-    ins: ndarray, int64
+    ins : ndarray, int64
         Index array for 'np.insert', can be applied to other arrays ('z') of similar shape 
         with 'zout = np.insert(z, ins, new_z_values_to_insert)'
 
@@ -983,7 +989,7 @@ def rewrap(t, x, method="rewrap", wrapat=[0,360], verbose=0):
     The ouput should only be used for plotting purposes, as with some options interpolated
     data points and/or `np.nan` are inserted which could bias scientific analysis.
 
-    See also
+    See Also
     --------
     rewrap2d
         Rewrap cyclic data in two dimensions (e.g. longitude and latitude).
@@ -1100,14 +1106,16 @@ def rewrap(t, x, method="rewrap", wrapat=[0,360], verbose=0):
     return tout, xout, ins
 
 def rewrap2d(x, y, method="rewrap", xwrapat=[-180,180], ywrapat=[-90,90], verbose=0):
-    """Rewrap cyclic x and y data for plotting line segments
+    """Rewrap cyclic x and y data for plotting line segments.
     
     Re-wrap cyclic data in two dimensions and insert breaks in the lines so that when 
     plotted they are properly terminated at the borders of the 2D wrapping region. This 
     function solves two issues with plotting lines for cyclic data: 
+        
     - the near vertical and horizontal line segments at the wraps, 
     - lines do not extend to the wrapping boundaries (instead they take the opposite 
       direction)
+
     If unsolved, line plots on cyclic data can be misleading or unclear at best, while
     a scatter plot may not provide all the information. 
 
@@ -1117,9 +1125,9 @@ def rewrap2d(x, y, method="rewrap", xwrapat=[-180,180], ywrapat=[-90,90], verbos
 
     Parameters
     ----------
-    x, y: array_like, float
+    x, y : array_like, float
         The absissae (x) and ordinates (y), e.g. longitude and latitude
-    method: {'rewrap', 'unwrap', split', rewrap_nosplit'}, optional
+    method : {'rewrap', 'unwrap', split', rewrap_nosplit'}, optional
         The rewrapping method. Defines what action is taken at a data wrap 
             - rewrap : estimate time of wrap by interpolation from the data, and insert 
                    the upper/lower wrap limits and 'np.nan' to cause a split in the line. 
@@ -1128,16 +1136,16 @@ def rewrap2d(x, y, method="rewrap", xwrapat=[-180,180], ywrapat=[-90,90], verbos
             - split : split the lines at a wrap by inserting 'np.nan'. The output arrays 
                    are larger than the the input arrays (1 additional data point per wrap)
             - unwrap : make the data continuous. The length of the arrays is unchanged 
-    xwrapat, ywrapat: list, optional
+    xwrapat, ywrapat : list, optional
         List with the lower and upper wrap boundaries.
-    verbose: int, optional
+    verbose : int, optional
         Vebosity level.
 
     Returns
     -------
-    xout, yout: ndarray, float
+    xout, yout : ndarray, float
         The rewrapped abcissae (x) and rewrapped ordinates (y) for plotting
-    ins: ndarray, int64
+    ins : ndarray, int64
         Index array for 'np.insert', can be applied to other arrays ('z') of similar shape 
         with 'zout = np.insert(z, ins, new_z_values_to_insert)'
 
@@ -1146,7 +1154,7 @@ def rewrap2d(x, y, method="rewrap", xwrapat=[-180,180], ywrapat=[-90,90], verbos
     The ouput should only be used for plotting purposes, as with some options interpolated
     data points and/or `np.nan` are inserted which could bias scientific analysis.
 
-    See also
+    See Also
     --------
     rewrap
         Rewrap cyclic data in one dimension.
@@ -1249,7 +1257,7 @@ def rewrap2d(x, y, method="rewrap", xwrapat=[-180,180], ywrapat=[-90,90], verbos
     
 
 def xlabels(t):
-    """Prepare x-axis labels and title string entries"""
+    """Prepare x-axis labels and title string entries."""
     
     kmid=int(t.shape[0]/2)
     if ( t[-1] - t[0] ) < 1/120:
@@ -1442,7 +1450,7 @@ def obj2sat(xsat, vsat, xobj, vobj):
     return zen, azi, robj2sat, rrobj2sat
     
 def xyz2radec(xyz, unit='rad'):
-    """Compute right ascension (ra) and declination (dec)"""
+    """Compute right ascension (ra) and declination (dec)."""
     
     assert unit in ['rad', 'deg'], f"Incorrect unit {unit}."
     
@@ -1455,7 +1463,7 @@ def xyz2radec(xyz, unit='rad'):
     return ra, dec
 
 def ra2lon(t, ra, unit='rad'):
-    """Convert right ascension in ECI to longitude in ECEF"""
+    """Convert right ascension in ECI to longitude in ECEF."""
     
     # Substract GMST from right-ascension in ECI to obtain longitude in ECEF
 

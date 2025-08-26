@@ -40,31 +40,53 @@ The functions are optimized for Python's numpy library, it accepts mostly numpy
 alike ndarrays with the coordinates (usually three) in the last axis.
 """
 
+__author__ = "Hans van der Marel"
+__copyright__ = "Copyright 2022-2024, Hans van der Marel, Delft University of Technology."
+__credits__ = ["Hans van der Marel", "Simon van Diepen"]
+__license__ = "License Name and Info"
+__version__ = "0.9.0"
+__maintainer__ = "Hans van der Marel"
+__email__ = "h.vandermarel@tudelft.nl"
+__status__ = "development"
+
+
 """
+Created:    20 Aug 2022 by Hans van der Marel from crsutil
+Modified:   20 Aug 2022 by Hans van der Marel
+             - inqell, xyz2plh and plh2xyz from crsutil with minor to major changes
+             - new functions ellnormal, xyz2neu, neu2xyx, xyz2zas, zas2xyz
+             - rewrite of the docstrings, reinsert original comments from Matlab
+             - major style improvements, modified options, more Pythonic
+            16 Jul 2024 by Hans van der Marel
+             - new functions ellrotate and covtransform
+             - many major and minor changes to other functions
+            18 Jul 2024 by Hans van der Marel
+             - Minor changes to the docstrings
+             - Optional output of rotation matrix in xyz2neu and neu2xyz
+            19 Jul 2024 by Hans van der Marel
+             - Modified ellnormal, improved docstrings, fix bug in normalize option, 
+               added assertion on mode
+            22 Jul 2024 by Hans van der Marel
+             - port of prtcrd to Python, renamed to printcrd 
+             - added functions printxyz, printplh, deg2dms
+            27 Jul 2024 by Hans van der Marel
+             - new functions setell and ellcurvature
+             - changed default for ellipsoid in inqell to 'current'
+             - changes to the docstrings
+            22 Aug 2024 by Hans van der Marel
+             - Major edits to the docstrings to facilitate sphynx
+
 The functions are based the crsutil Malab toolbox written by Hans van der Marel 
 starting in 1995. Some of the functions were ported to Python in November 2020
 with the help of Ullas Rajvanshi and Simon van Diepen, and became part of the 
-crsutil.py module (with only a subset of the Matlab crsutil toolbox) 
+crsutil.py module (with only a subset of the Matlab crsutil toolbox).
 
 In August 2022 the crsutil.py was split into two new modules, crstrans.py and
 satorb.py, with crstrans.py including new functions for local reference frames,
 and a full rewrite, with improved docstrings, reinsertion of original comments,
 major style improvements, modified options, more Pythonic.
 
-Created:    20 Aug 2022 by Hans van der Marel from crsutil
-Modified:   20 Aug 2022 by Hans van der Marel
-             - new functions ellnormal, xyz2neu, neu2xyx, xyz2zas, zas2xyz
-             - minor to major changes to inqell, xyz2plh and plh2xyz
-             - rewrite of the docstrings, reinsert original comments from Matlab
-             - major style improvements, modified options, more Pythonic
-            16 Jul 2024 by Hans van der Marel
-             - new functions setell, ellrotate, ellcurvature, covtransform, printcrd,
-               printxyz, printplh, deg2dms
-             - many major and minor changes to other functions
-            28 Jul 2024 by Hans van der Marel
-             - release of version 1.1
-
-Copyright Hans van der Marel, Delft University of Technology, 2022-2024
+Copyright 2022-2024, Hans van der Marel, Delft University of Technology. 
 """
 
 # Importing the Libraries
@@ -82,10 +104,10 @@ import numpy as np
 # Define a dict with the Semi-major axis, inverse flattening and GM for various ellipsoids
 
 ELLIPSOID_PARAMETERS = {
-    'AIRY':          [6377563.396, 299.324964, np.NaN], 
-    'BESSEL':        [6377397.155, 299.1528128, np.NaN], 
-    'CLARKE':        [6378249.145, 293.465, np.NaN],
-    'INTERNATIONAL': [6378388.0, 297.00, np.NaN],
+    'AIRY':          [6377563.396, 299.324964, np.nan], 
+    'BESSEL':        [6377397.155, 299.1528128, np.nan], 
+    'CLARKE':        [6378249.145, 293.465, np.nan],
+    'INTERNATIONAL': [6378388.0, 297.00, np.nan],
     'HAYFORD':       [6378388.0, 297.00, 3.986329e14],
     'GRS80':         [6378137.0, 298.257222101, 3.986005e14],
     'WGS84':         [6378137.0, 298.257223563, 3.986005e14],
@@ -100,23 +122,23 @@ def xyz2plh(xyz, ellipsoid='current', method='Bowring', unit='rad'):
 
     Parameters
     ----------
-    xyz: array_like with shape (...,3) 
+    xyz : array_like with shape (...,3) 
         Cartesian XYZ coordinates. 
-    ellipsoid: str or list of floats, default = 'current'
+    ellipsoid : str or list of floats, default = 'current'
         Text string with the name of the ellipse or a list ``[a, 1/f]`` with the semi-major 
         axis `a` and inverse flattening `1/f`. The current ellipsoid can be set by
         `setell`. Default for the current ellips is 'WGS-84'.
-    method: {'Bowring', 'iterative'}, default = 'Bowring'
+    method : {'Bowring', 'iterative'}, default = 'Bowring'
         Bowring's method is uded by default. Bowring's method is faster, but can 
         only be used on the surface of the Earth. The iterative method is slower 
         and less precise on the surface of the earth, but should be used above 
         10-20 km of altitude.
-    unit: {'rad', 'deg'},  default = 'rad'
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for the output latitude and longitude.
 
     Returns
     -------
-    plh: ndarray with the same shape (...,3) as `xyz`
+    plh : ndarray with the same shape (...,3) as `xyz`
         Ellipsoidal coordinates (geographic latitude, longitude and height above the ellipsoid).
 
     See Also
@@ -136,24 +158,6 @@ def xyz2plh(xyz, ellipsoid='current', method='Bowring', unit='rad'):
     True
 
     """ 
-
-    """
-    Created:     7 May 1995 by Hans van der Marel for Matlab
-    Modified:   14 Jun 2013 by Hans van der Marel
-                 - updated description
-                22 Nov 2020 by Ullas Rajvanshi
-                 - Inital port to Python
-                20 Aug 2022 by Hans van der Marel
-                 - Rewrite of the docstring, reinsert original comments
-                 - Major style improvements, modified options, more Pythonic
-                18 July 2024 by Hans van der Marel
-                 - Minor changes to the docstrings
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (xyz2plh Matlab function of the crsutil toolbox).
-     
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """
     
     # Force input array to ndarray and check the shape
     
@@ -204,18 +208,18 @@ def plh2xyz(plh, ellipsoid='current', unit='rad'):
 
     Parameters
     ----------
-    plh: array_like shape (...,3) 
+    plh : array_like shape (...,3) 
         Ellipsoidal coordinates (geographic latitude, longitude and height above the ellipsoid).
-    ellipsoid: str or list of floats, default = 'current'
+    ellipsoid : str or list of floats, default = 'current'
         Text string with the name of the ellipse or a list ``[a, 1/f]`` with the semi-major 
         axis `a` and inverse flattening `1/f`. The current ellipsoid can be set by
         `setell`. Default for the current ellips is 'WGS-84'. 
-    unit: {'rad', 'deg'},  default = 'rad'
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for the input latitude and longitude.
 
     Returns
     -------
-    xyz: ndarray with the same shape (...,3) as `plh`
+    xyz : ndarray with the same shape (...,3) as `plh`
         Cartesian XYZ coordinates.
         
     See Also
@@ -235,24 +239,6 @@ def plh2xyz(plh, ellipsoid='current', unit='rad'):
     True
 
     """ 
-
-    """
-    Created:     7 May 1995 by Hans van der Marel for Matlab
-    Modified:   14 Jun 2013 by Hans van der Marel
-                 - updated description
-                22 Nov 2020 by Ullas Rajvanshi
-                 - Inital port to Python
-                20 Aug 2022 by Hans van der Marel
-                 - Rewrite of the docstring, reinsert original comments
-                 - Major style improvements, modified options, more Pythonic
-                18 July 2024 by Hans van der Marel
-                 - Minor changes to the docstrings
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (plh2xyz Matlab function of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """
 
     # Force input array to ndarray, check the shape, optionally convert units
     
@@ -315,24 +301,6 @@ def inqell(ellipsoid='current'):
     
     """ 
 
-    """
-    Created:     7 May 1995 by Hans van der Marel for Matlab
-    Modified:   14 Jun 2013 by Hans van der Marel
-                 - updated description
-                22 Nov 2020 by Ullas Rajvanshi
-                 - Inital port to Python
-                20 Aug 2022 by Hans van der Marel
-                 - Rewrite of the docstring, reinsert original comments
-                 - Major style improvements, modified options, more Pythonic
-                27 Jul 2024 by Hans van der Marel
-                 - Changed default for ellipsoid to 'current'
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (xyz2plh Matlab function of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022
-    """
-
     global ELLIPSOID_PARAMETERS
 
     if isinstance(ellipsoid, str):
@@ -358,7 +326,7 @@ def setell(ellipsoid=None):
 
     Parameters
     ----------
-    ellipsoid: None or str or list of floats, default = None
+    ellipsoid : None or str or list of floats, default = None
         If None returns the name of the current ellipsoid, if str set the 
         current ellipsoid to one given in str, if list of floats ``[a, 1/f]`` 
         or ``[a, 1/f, GM]`` set a user specified ellipsoid with semi-major axis
@@ -367,7 +335,7 @@ def setell(ellipsoid=None):
 
     Returns
     -------
-    current_ellipsoid: str
+    current_ellipsoid : str
         Name of the current ellipsoid.
            
     See Also
@@ -385,12 +353,6 @@ def setell(ellipsoid=None):
     
     """ 
 
-    """
-    Created:    27 Jul 2024 by Hans van der Marel
-    Modified:                 
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
-    """
     global CURRENT_ELLIPSOID, ELLIPSOID_PARAMETERS
 
     if isinstance(ellipsoid, str):
@@ -437,7 +399,7 @@ def xyz2neu(xyz, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
 
     Parameters
     ----------
-    xyz: array_like with shape (...,3) 
+    xyz : array_like with shape (...,3) 
         Cartesian XYZ coordinates. The origin is either in the center of the Earth or at the
         position given by the second argument `ref`.
     ref : array_like with shape (...,3) or (...,2)
@@ -446,12 +408,13 @@ def xyz2neu(xyz, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
         to `xyz`. The North, East, Up coordinates for the(se) point(s) are (0, 0, 0). In case `ref`
         is a single coordinate triplet/doublet then the same reference points is used for all
         the points in `xyz`. 
-    origin: {'ref', 'ecef'}, default='ref'
+    origin : {'ref', 'ecef'}, default='ref'
         Origin of the coordinates in `xyz`. If origin='ref' then the XYZ coordinates in `xyz`
         are with respect to the point(s) given in `ref`. The other possibility is coordinates
         in the ECEF reference frame with the origin at the center of the Earth.
-    mode: {'plh', 'xyz','normal'}, default = 'plh'
+    mode : {'plh', 'xyz','normal'}, default = 'plh'
         Coordinate type for `ref`. Possible values are:    
+            
          - 'plh' : `ref` contains the geographic latitude and longitude with the unit specified by 
            `unit`. A third coordinate with the height is optional.
          - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) to the 
@@ -459,17 +422,18 @@ def xyz2neu(xyz, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
          - 'normal' : `ref` contains a normal vector with Cartesian coordinates. It does
            not necessarily have to be a unit vector (the function returns the unit vector). This
            options only works when the origin of the `xyz` coordinates is `ref` (origin='ref').
-    unit: {'rad', 'deg'},  default = 'rad'
+           
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case mode='plh' option is used.
-    rotmatrix: bool, default=False
+    rotmatrix : bool, default=False
         Output the rotation matrix(es) as an optional output argument. The rotation matrix 
         can be used for instance to convert the covariance matrix (when available and needed).
 
     Returns
     -------
-    neu: ndarray with shape (...,3) similar to `xyz`
+    neu : ndarray with shape (...,3) similar to `xyz`
         Local North, East, Up coordinates `neu` with respect to the point(s) in `ref`.
-    R: ndarray with shape (...,3,3), optional
+    R : ndarray with shape (...,3,3), optional
         Rotation matrix(es), with ``neu = dxyz @ R``. In case `ref` is a vector `R` is a 3-by-3 matrix , 
         in case `ref` is a multidimensional array, `R` has one more dimension than `ref` with
         shape (...,3,3). The rotation matrix can be used for instance to convert the covariance matrix 
@@ -560,33 +524,7 @@ def xyz2neu(xyz, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
     array([-0.2206844 ,  0.92780758,  1.44584629])
     
     """ 
-    
-    """
-    Created:     7 May 1995 by Hans van der Marel for Matlab
-    Modified:   24 May 2007 by Hans van der Marel
-                 - faster implementation reducing use of trigonometry 
-                 - option to use normal vector N instead of phi/lambda
-                 - updated description
-                14 Jun 2013 by Hans van der Marel
-                 - minor changes to description
-                 - added the options to use XR
-                12 March 2014 by Hans van der Marel
-                 - added the option to output the rotation matrix
-                 - minor corrections to description
-                12 April 2020 by Hans van der Marel
-                 - more robust test on transpose (for Matlab 2020?)
-                20 Aug 2022 by Hans van der Marel
-                 - port to Python
-                18 July 2024 by Hans van der Marel
-                 - Minor changes to the docstrings
-                 - Optional output of rotation matrix
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (xyz2neu Matlab function of the crsutil toolbox).
-    
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """
-    
+        
     # Force input arrays to ndarray and check the shapes
     
     xyz = np.array(xyz)
@@ -652,21 +590,22 @@ def neu2xyz(neu, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
 
     Parameters
     ----------
-    neu: array_like with shape (...,3) 
+    neu : array_like with shape (...,3) 
         Local North, East, Up coordinates with respect to the point(s) in `ref`.
-    ref: array_like with shape (...,3) or (...,2)
+    ref : array_like with shape (...,3) or (...,2)
         Reference position(s) on the ellipsoid. The type of coordinates are specified by `mode`.
         'ref' can be a vector with a single coordinate triplet/doublet or have a similar shape
         to `neu`. The North, East, Up coordinates for the(se) point(s) are (0, 0, 0). In case `ref`
         is a single coordinate triplet/doublet then the same reference points is used for all
         the points in `neu`. 
-    origin: {'ref', 'ecef'}, default='ref'
+    origin : {'ref', 'ecef'}, default='ref'
         Origin of the coordinates in the output XYZ coordinates. If origin='ref' then the XYZ 
         coordinates in the output are with respect to the point(s) given in `ref`. The other 
         possibility is coordinates in the ECEF reference frame with the origin at the center 
         of the Earth.
-    mode: {'plh', 'xyz','normal'}, default = 'plh'
+    mode : {'plh', 'xyz','normal'}, default = 'plh'
         Coordinate type for `ref`. Possible values are: 
+            
          - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
            specified by `unit`. A third coordinate with the height is optional.
          - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
@@ -674,18 +613,19 @@ def neu2xyz(neu, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
            above or below `ref`.
          - 'normal' : `ref` contains a normal vector with Cartesian coordinates. It does 
            not necessarily have to be a unit vector (the function returns the unit vector).
-    unit: {'rad', 'deg'},  default = 'rad'
+           
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case the 'plh' options is used.
-    rotmatrix: bool, default=False
+    rotmatrix : bool, default=False
         Output the rotation matrix(es) as an optional output argument. The rotation matrix 
         can be used for instance to convert the covariance matrix (when available and needed).
 
     Returns
     -------
-    xyz: ndarray with shape (...,3) similar to `neu`
+    xyz : ndarray with shape (...,3) similar to `neu`
         Cartesian XYZ coordinates. The origin is either in the center of the Earth or at the
         position given by `ref`.
-    R: ndarray with shape (...,3,3), optional
+    R : ndarray with shape (...,3,3), optional
         Rotation matrix(es), with ``dxyz = neu @ R``. In case `ref` is a vector `R` is a 3-by-3 matrix , 
         in case `ref` is a multidimensional array, `R` has one more dimension than `ref` with
         shape (...,3,3). The rotation matrix can be used for instance to convert the covariance matrix 
@@ -781,28 +721,6 @@ def neu2xyz(neu, ref, origin='ref', mode='plh', unit='rad', rotmatrix=False):
         
     """ 
     
-    """
-    Created:     7 May 1995 by Hans van der Marel for Matlab
-    Modified:   14 Jun 2013 by Hans van der Marel
-                 - faster implementation reducing use of trigonometry 
-                 - option to use normal vector N instead of phi/lambda
-                 - added the options to use XR
-                 - updated description
-                12 March 2014 by Hans van der Marel
-                 - added the option to output the rotation matrix
-                 - minor corrections to description
-                20 Aug 2022 by Hans van der Marel
-                 - port to Python
-                18 July 2024 by Hans van der Marel
-                 - Major changes to the docstrings
-                 - Optional output of rotation matrix
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (xyz2neu Matlab function of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """
-    
     # Force input arrays to ndarray and check the shapes
     
     neu = np.array(neu)
@@ -869,7 +787,7 @@ def xyz2zas(xyz, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
 
     Parameters
     ----------
-    xyz: array_like with shape (...,3) 
+    xyz : array_like with shape (...,3) 
         Cartesian XYZ coordinates. The origin is either in the center of the Earth or at the
         position given by `ref`.
     ref : array_like shape (...,3) or (...,2)
@@ -878,12 +796,13 @@ def xyz2zas(xyz, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
         to `xyz`. The North, East, Up coordinates for the(se) point(s) are (0, 0, 0). In case `ref`
         is a single coordinate triplet/doublet then the same reference points is used for all
         the points in `xyz`. 
-    origin: {'ref', 'ecef'}, default='ref'
+    origin : {'ref', 'ecef'}, default='ref'
         Origin of the coordinates in `xyz`. If origin='ref' then the XYZ coordinates in `xyz`
         are with respect to the point(s) given in `ref`. The other possibility is coordinates
         in the ECEF reference frame with the origin at the center of the Earth.
-    mode: {'plh', 'xyz','normal'}, default = 'plh'
+    mode : {'plh', 'xyz','normal'}, default = 'plh'
         Coordinate type for `ref`. Possible values are:
+            
          - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
            specified by `unit`. A third coordinate with the height is optional.
          - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
@@ -891,14 +810,15 @@ def xyz2zas(xyz, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
            above or below `ref`.
          - 'normal' : `ref` contains a normal vector with Cartesian coordinates. It does 
            not necessarily have to be a unit vector (the function returns the unit vector).
-    refunit: {'rad', 'deg'},  default = 'rad'
+           
+    refunit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case the 'plh' options is used.
-    zasunit: {'rad/m', 'deg/m'},  default = 'rad/m'
+    zasunit : {'rad/m', 'deg/m'},  default = 'rad/m'
         Units for zenith angle and azimuth.
 
     Returns
     -------
-    zas: ndarray with shape similar to `xyz`.
+    zas : ndarray with shape similar to `xyz`.
         Zenith angle (z), azimuth angle (a) and distance (s) from `ref` to `xyz`.
            
     Examples
@@ -948,21 +868,6 @@ def xyz2zas(xyz, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
     array([0.58310003, 1.80431289, 1.73205081])
        
     """ 
-    
-    """
-    Created:    24 May 2007 by Hans van der Marel for Matlag
-    Modified:   14 Jun 2013 by Hans van der Marel
-                - updated description
-                20 Aug 2022 by Hans van der Marel
-                 - port to Python
-                27 Jul 2024 by Hans van der Marel
-                 - changes to the docstring
-                 
-    Based on code originally developed for Matlab(TM) in 2007 and 2013 by the 
-    author (xyz2zas Matlab function of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022
-    """
     
     # Force input arrays to ndarray and check the shapes
     
@@ -1032,7 +937,7 @@ def zas2xyz(zas, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
 
     Parameters
     ----------
-    zas: array_like with shape (...,3) 
+    zas : array_like with shape (...,3) 
         Zenith angle, azimuth angle and distance from `ref` to `xyz`.
     ref : array_like with shape (...,3) or (...,2)
         Reference position(s) on the ellipsoid. The type of coordinates are specified by `mode`.
@@ -1040,13 +945,14 @@ def zas2xyz(zas, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
         to `neu`. The North, East, Up coordinates for the(se) point(s) are (0, 0, 0). In case `ref`
         is a single coordinate triplet/doublet then the same reference points is used for all
         the points in `neu`. 
-    origin: {'ref', 'ecef'}, default='ref'
+    origin : {'ref', 'ecef'}, default='ref'
         Origin of the coordinates in the output XYZ coordinates. If origin='ref' then the XYZ 
         coordinates in the output are with respect to the point(s) given in `ref`. The other 
         possibility is coordinates in the ECEF reference frame with the origin at the center 
         of the Earth.
-    mode: {'plh', 'xyz','normal'}, default = 'plh'
+    mode : {'plh', 'xyz','normal'}, default = 'plh'
         Coordinate type for `ref`. Possible values are:
+            
          - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
            specified by `unit`. A third coordinate with the height is optional.
          - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
@@ -1054,14 +960,15 @@ def zas2xyz(zas, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
            above or below `ref`.
          - 'normal' : `ref` contains a normal vector with Cartesian coordinates. It does 
            not necessaraly have to be a unit vector (the function returns the unit vector).
-    refunit: {'rad', 'deg'},  default = 'rad'
+           
+    refunit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case the 'plh' options is used.
-    zasunit: {'rad/m', 'deg/m'},  default = 'rad/m'
+    zasunit : {'rad/m', 'deg/m'},  default = 'rad/m'
         Units for latitude and longitude, only useful in case the 'plh' options is used.
 
     Returns
     -------
-    xyz: ndarray with shape (...,3) 
+    xyz : ndarray with shape (...,3) 
         Cartesian XYZ coordinates. The origin is either in the center of the Earth or at the
         position given by `ref`.
            
@@ -1109,17 +1016,6 @@ def zas2xyz(zas, ref, origin='ref', mode='plh', refunit='rad', zasunit='rad/m'):
     
     """ 
     
-    """
-    Created:    14 Jun 2013 by Hans van der Marel for Matlab
-    Modified:   20 Aug 2022 by Hans van der Marel
-                 - port to Python
-                 
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (zas2xyz Matlab function of the crsutil toolbox).
-    
-    Copyright Hans van der Marel, Delft University of Technology, 2022
-    """
-    
     # Force input array zas to ndarray, convert to neu, call neu2xyz to do the work
     
     zas = np.array(zas)
@@ -1144,20 +1040,20 @@ def ellcurvature(lat, height, unit='rad', ellipsoid='current'):
     
     Parameters
     ----------
-    lat: array_like or float
+    lat : array_like or float
         Latitude in radians or degrees.  
-    height: array_like or float
+    height : array_like or float
         Height in meters.
-    unit: {'rad', 'deg'},  default = 'rad'
+    unit : {'rad', 'deg'},  default = 'rad'
         Unit of latitude (input) and for multiplication factors (output).
-    ellipsoid: str or list of floats, default = 'current'
+    ellipsoid : str or list of floats, default = 'current'
         Text string with the name of the ellipse or a list ``[a, 1/f]`` with the semi-major 
         axis `a` and inverse flattening `1/f`. The current ellipsoid can be set by
         `setell`. Default for the current ellips is 'WGS-84'.
 
     Returns
     -------
-    flat, flon: float
+    flat, flon : float
         Conversion factors for latitude and longitude in `unit`.
                        
     Examples
@@ -1170,13 +1066,6 @@ def ellcurvature(lat, height, unit='rad', ellipsoid='current'):
     In Delft one arcsec is 30.908 m in latitude and 19.077 m in longitude.
     
     """ 
-
-    """
-    Created:     27 Jul 2024 by Hans van der Marel
-    Modified:    
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
-    """
 
     assert unit in ['deg' ,'rad'], f"Unsupported units {unit}."
 
@@ -1215,21 +1104,23 @@ def ellnormal(ref, mode='plh', unit='rad'):
     ref : array_like with shape (...,3) or (...,2)
         Reference position(s) on the ellipsoid. The type of coordinates are specified by `mode`.
         `ref` can be a vector with more than one coordinate triplet/doublet.  
-    mode: {'plh', 'xyz','normalize'}, default = 'plh'
-        Coordinate type for `ref`. Possible values are:
-         - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
-           specified by `unit`. A third coordinate with the height is optional, but not used.
-         - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
-           to the ellipsoid. The normal vector is computed for a point on the ellipsoid 
-           above or below `ref`.
-         - 'normal' : `ref` contains a vector with Cartesian coordinates. The function 
-           returns the normalized unit vector.
-    unit: {'rad', 'deg'},  default = 'rad'
+    mode : {'plh', 'xyz','normalize'}, default = 'plh'
+        Coordinate type for `ref`. Possible values are:  
+            
+        - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
+          specified by `unit`. A third coordinate with the height is optional, but not used.
+        - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
+          to the ellipsoid. The normal vector is computed for a point on the ellipsoid 
+          above or below `ref`.
+        - 'normal' : `ref` contains a vector with Cartesian coordinates. The function 
+          returns the normalized unit vector.
+           
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case the mode='plh' option is used.
 
     Returns
     -------
-    n: ndarray with shape (...,3)
+    n : ndarray with shape (...,3)
         Unit normal vector(s) in Cartesian XYZ coordinates.
         
     See Also
@@ -1269,17 +1160,6 @@ def ellnormal(ref, mode='plh', unit='rad'):
      [0.61672217 0.04312542 0.7859987 ]]
 
     """ 
-
-    """
-    Created:     20 Aug 2022 by Hans van der Marel
-    Modified:    19 Jul 2024 by Hans van der Marel
-                  - Modified doc strings, fix bug in normalize option, added assertion on mode
-    
-    Based on code originally developed for Matlab(TM) in 2007 by the author (neu2xyz, 
-    xyz2neu, xyz2zas and zas2xyz Matlab functions of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """
 
     assert mode in ['plh' ,'xyz', 'normal'], f"Unsupported mode {mode}."
     
@@ -1321,8 +1201,9 @@ def ellrotmatrix(ref, mode='plh', unit='rad'):
     ref : array_like with shape (...,3) or (...,2)
         Reference position(s) on the ellipsoid. The type of coordinates are specified by `mode`.
         `ref` can be a vector with more than one coordinate triplet/doublet.  
-    mode: {'plh', 'xyz','normal'}, default = 'plh'
+    mode : {'plh', 'xyz','normal'}, default = 'plh'
         Coordinate type for `ref`. Possible values are:
+            
          - 'plh' : `ref` contains the geographic latitude and longitude with the unit 
            specified by `unit`. A third coordinate with the height is optional, but not used.
          - 'xyz' : `ref` contains cartesian XYZ coordinates in the ECEF of a point (close) 
@@ -1330,21 +1211,22 @@ def ellrotmatrix(ref, mode='plh', unit='rad'):
            above or below `ref`.
          - 'normal' : `ref` contains a normal vector with Cartesian coordinates. It does 
            not necessaraly have to be a unit vector.
-    unit: {'rad', 'deg'},  default = 'rad'
+           
+    unit : {'rad', 'deg'},  default = 'rad'
         Units for latitude and longitude, only useful in case the mode='plh' option is used.
-
-    The parameters are passed to `ellnormal` to compute the unit normal vector from which
-    the rotation matrix is computed. 
 
     Returns
     -------
-    R: ndarray with shape (...,3,3)
+    R : ndarray with shape (...,3,3)
         Rotation matrix(es) to transform `dxyz` into `neu`, with ``neu = dxyz @ R``. In case `ref` 
         is a vector, `R` becomes a 3-by-3 matrix , in case `ref` is a multidimensional array, `R` 
         will have one more dimension than `ref` with shape (...,3,3). 
     
     Notes
     -----
+    The parameters are passed to `ellnormal` to compute the unit normal vector from which
+    the rotation matrix is computed. 
+
     The rotation is defined as::
     
         neu = dxyz @  R     or    neu = R.T @ dxyz.T   , and    Qneu =  R.T @ Qxyz @ R     
@@ -1394,17 +1276,6 @@ def ellrotmatrix(ref, mode='plh', unit='rad'):
     
     """ 
 
-    """
-    Created:     20 Aug 2022 by Hans van der Marel
-    Modified:    17 Jul 2024 by Hans van der Marel
-                  - Updated docstrings and added examples
-    
-    Based on code originally developed for Matlab(TM) in 1995 and 2013 by the 
-    author (xyz2neu Matlab function of the crsutil toolbox).
-
-    Copyright Hans van der Marel, Delft University of Technology, 2022-2024
-    """   
-    
     # normal vector
         
     n = ellnormal(ref, mode=mode, unit=unit)
@@ -1437,18 +1308,18 @@ def covtransform(qin, fmtin, fmtout, rotmatrix=None):
 
     Parameters
     ----------
-    qin: array_like shape (...,6) or shape (...,3,3) 
+    qin : array_like shape (...,6) or shape (...,3,3) 
         Input (compact) co-variance matrix/vector.
-    fmtin: str
+    fmtin : str
         Format of the input compact co-variance matrix/vector, see notes.
-    fmtout: str
+    fmtout : str
         Format of the output compact co-variance matrix/vector, see notes.
-    rotmatrix: array_like with shape (...,3,3), default=None
+    rotmatrix : array_like with shape (...,3,3), default=None
         Optional rotation matrix to obtain ``Qout = R.T @ Qin @ R`` .         
 
     Returns
     -------
-    qout: ndarray with shape (...,6) or shape (...,3,3)
+    qout : ndarray with shape (...,6) or shape (...,3,3)
         Output (compact) co-variance matrix/vector.
 
     Notes
@@ -1481,8 +1352,6 @@ def covtransform(qin, fmtin, fmtout, rotmatrix=None):
     The other vector formats have their last two positions swapped compared to the 
     store by diagonal formats.
 
-    Notes
-    -----
     The input rotation matrix is transposed compared to what is often found in literature and what is
     used by the Matlab versions. This is intentional, as the rotation matrix from `xyz2neu` and `neu2xyz`
     is defined by::
@@ -1714,9 +1583,9 @@ def printcrd(crd, prtfmt="xyz", labels=[], sdcov=[], sdcovfmt="std", unit='rad/m
 
     Parameters
     ----------
-    crd: array_like with shape (...,3) 
+    crd : array_like with shape (...,3) 
         Array with Cartesian or geographic coordinates.
-    prtfmt: {'xyz', 'neu','map', 'plh', 'dms','dmspretty', ...}, default='xyz'
+    prtfmt : {'xyz', 'neu','map', 'plh', 'dms','dmspretty', ...}, default='xyz'
         Coordinate format for printing.
         
         - 'xyz' ('ecef'):  Cartesian XYZ coordinates (default)
@@ -1728,16 +1597,16 @@ def printcrd(crd, prtfmt="xyz", labels=[], sdcov=[], sdcovfmt="std", unit='rad/m
         
         For the options 'dms', 'dmspretty' and 'plh' `crd` must contain the latitude and 
         longitude in either radians or degrees (with unit='deg/m')
-    labels: array_like, optional
+    labels : array_like, optional
         Optional list with row labels, e.g. station names.        
-    sdcov: array_like with shape (...,3) or shape (...,6) 
+    sdcov : array_like with shape (...,3) or shape (...,6) 
         Optional standard deviations (...,3) and/or co-variances (...,6). 
-    sdcovfmt: {'std', 'qvec', 'scor', 'scov', ...}, optional
+    sdcovfmt : {'std', 'qvec', 'scor', 'scov', ...}, optional
         Format of the input compact co-variance matrix/vector, see `covtransform` for
         all for possible formats. Default is 'std'
-    unit: {'rad/m', 'deg/m', 'deg', 'rad'}, optional
+    unit : {'rad/m', 'deg/m', 'deg', 'rad'}, optional
         Units of input `crd` array, , default 'rad/m'.
-    title: str, optional
+    title : str, optional
         Optional title string.
         
     Examples
@@ -1777,17 +1646,6 @@ def printcrd(crd, prtfmt="xyz", labels=[], sdcov=[], sdcovfmt="std", unit='rad/m
     Stolwijk     4.000000000     5.000000000     6.0000     2.0000   2.0000   2.0000   2.0000   2.0000   2.0000
      
     """ 
-
-    """
-    Created:    12 March 2014 by Hans van der Marel for Matlab
-    Modified:   22 July 2024 by Hans van der Marel
-                 - Port to Python
-                 - Renamed to printcrd (instead of prtcrd)
-                 
-    Based on code originally developed for Matlab(TM) in 2014 by the author.
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
-    """
 
     # Force input array to ndarray and check the first twp parameters 
     crd = np.array(crd)
@@ -1900,7 +1758,7 @@ def printxyz(xyz):
     
     Parameters
     ----------
-    xyz: array_like with shape (...,3) 
+    xyz : array_like with shape (...,3) 
         Cartesian coordinates.
 
     Examples
@@ -1908,13 +1766,6 @@ def printxyz(xyz):
     >>> printxyz([4123456.23000, 0.3, 0.123451])
     [ 4123456.2300  0.3000  0.1235]
     
-    """
-
-    """
-    Created:    22 July 2024 by Hans van der Marel
-    Modified:   
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
     """
     
     with np.printoptions(formatter={'float': '{: 0.4f}'.format}, suppress=True):
@@ -1928,9 +1779,9 @@ def printplh(plh, unit='rad/m'):
 
     Parameters
     ----------
-    plh: array_like with shape (...,3) 
+    plh : array_like with shape (...,3) 
         Ellipsoidal coordinates (geographic latitude, longitude and height above the ellipsoid).
-    unit: {'rad/m', 'deg/m', 'rad', 'deg'},  default = 'rad/m'
+    unit : {'rad/m', 'deg/m', 'rad', 'deg'},  default = 'rad/m'
         Units for the input latitude and longitude (and height).
 
     Notes
@@ -1944,13 +1795,6 @@ def printplh(plh, unit='rad/m'):
     >>> printplh([52.1234567891, 4., 110.000001], unit='deg')
     [ 52.12345679   4.         110.        ]
     
-    """
-
-    """
-    Created:    22 July 2024 by Hans van der Marel
-    Modified:   
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
     """
     
     tmp=np.array(plh)
@@ -1973,11 +1817,11 @@ def deg2dms(value, pretty=False, unit='rad'):
 
     Parameters
     ----------
-    value: float
+    value : float
         Value to convert.
-    unit: {'rad', 'deg', 'rad/m', 'deg/m'},  optional, default = 'rad'
+    unit : {'rad', 'deg', 'rad/m', 'deg/m'},  optional, default = 'rad'
         Unit of the values (only 'rad' and 'deg' are meaningful).
-    pretty: boolean, optional, default=False
+    pretty : boolean, optional, default=False
         Pretty print with degree, minute and second symbol.
         
     Notes
@@ -1995,13 +1839,6 @@ def deg2dms(value, pretty=False, unit='rad'):
     >>> print(deg2dms(23.234567, unit='deg', pretty=True))
      23°14'04.4412"
     
-    """
-
-    """
-    Created:    22 July 2024 by Hans van der Marel
-    Modified:   
-
-    Copyright Hans van der Marel, Delft University of Technology, 2024
     """
 
     if unit in ['rad', 'rad/m']:

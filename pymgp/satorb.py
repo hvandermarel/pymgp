@@ -31,6 +31,15 @@ Sequential date numbers
 
 """
 
+__author__ = "Hans van der Marel"
+__copyright__ = "Copyright 2010-2024, Hans van der Marel, Delft University of Technology."
+__credits__ = ["Hans van der Marel", "Simon van Diepen", "Ullas Rajvanshi"]
+__license__ = "License Name and Info"
+__version__ = "0.9.0"
+__maintainer__ = "Hans van der Marel"
+__email__ = "h.vandermarel@tudelft.nl"
+__status__ = "development"
+
 """
 Created:    16 Nov 2010 by Hans van der Marel for Matlab
 Modified:   26 Nov 2016 by Hans van der Marel
@@ -67,6 +76,8 @@ Modified:   26 Nov 2016 by Hans van der Marel
              - major changes to satlookangle and prtlookangle, including
                modified docstring, and support for more dimensions, removed
                dependency on num2datetime
+            22 Aug 2024 by Hans van der Marel
+             - Major edits to the docstrings to facilitate sphynx
                                   
 Based on code originally developed for Matlab(TM) in 2010-2016 by the author.
 
@@ -101,17 +112,17 @@ def vec2orb(svec, GM=3986004418e5):
 
     Parameters
     ----------
-    svec: array_like with shape (...,6) 
+    svec : array_like with shape (...,6) 
         Array with  6-element inertial state vector `svec` with Cartesian  
         position and velocity `[X, Y, Z, Xdot, Ydot, Zdot]` in an ECI frame.
         Units are meter and meter/sec
-    GM: float, optional
+    GM : float, optional
         Value of GM. Default for GM [meter**3/sec**2] is the IERS 1996 standard
         value for the Earth (GM=3986004418e5)
         
     Returns
     -------
-    orb: ndarray with shape (...,6) similar to `svec`
+    orb : ndarray with shape (...,6) similar to `svec`
         Array with the 6 Keplerian elements `[ Semi-major axis (meters), Eccentricity (unity),  
         Inclination (radians), Right ascension of the ascending node (radians),  
         Argument of the pericenter (radians),  True anomaly (radians) ]`.
@@ -243,18 +254,18 @@ def orb2vec(orb, GM=3986004418e5):
 
     Parameters
     ----------
-    orb: array_like with shape (...,6)
+    orb : array_like with shape (...,6)
         Array with the 6 Keplerian elements `[ Semi-major axis (meters), Eccentricity (unity),  
         Inclination (radians), Right ascension of the ascending node (radians),  
         Argument of the pericenter (radians),  True anomaly (radians) ]`.
         Units are meters or radians.
-    GM: float, optional
+    GM : float, optional
         Value of GM. Default for GM [meter**3/sec**2] is the IERS 1996 standard
         value for the Earth (GM=3986004418e5)
         
     Returns
     -------
-    svec: ndarray with shape (...,6) similar to `orb`
+    svec : ndarray with shape (...,6) similar to `orb`
         Array with  6-element inertial state vector `svec` with Cartesian  
         position and velocity `[X, Y, Z, Xdot, Ydot, Zdot]` in an ECI frame.
         Units are meter and meter/sec
@@ -345,22 +356,20 @@ def orbtype(ecc, incl, tol=1e-8):
     
     Parameters
     ----------
-    ecc: array_like with same shape as `incl`
-        Array with the eccentricity (unity)
-    incl: array_like with same shape as `ecc`
-        Array with the inclination (radians)
-    tol: float, default 1e-8
+    ecc, incl : array_like 
+        Eccentricity (unity) and inclination (radians)
+    tol : float, default 1e-8
         Tolerance for zero eccentricity and zero inclination
 
     Returns
     -------
-    corbtype: ndarray of strings
-        Array with two character codes for the orbit type:
-            
-        - 'ei' ->  elliptical inclined     (all Kepler elements defined)
-        - 'ci' ->  circular inclined       (w =0, nu=arglat)
-        - 'ee' ->  elliptical equatorial   (w=lonper, omega=0)
-        - 'ce' ->  circular equatorial     (w=0, omega=0, nu=truelon)
+    corbtype : ndarray of {'ei', 'ci', 'ee', 'ce'}
+        Array with two character codes for the orbit type:    
+        
+        | 'ei' ->  elliptical inclined     (all Kepler elements defined)
+        | 'ci' ->  circular inclined       (w =0, nu=arglat)
+        | 'ee' ->  elliptical equatorial   (w=lonper, omega=0)
+        | 'ce' ->  circular equatorial     (w=0, omega=0, nu=truelon)
         
     Notes
     -----
@@ -406,14 +415,14 @@ def kepler(E, ecc):
         
     Parameters
     ----------
-    E: array_like
+    E : array_like
         Eccentric anomaly (radians)
-    ecc: array_like 
+    ecc : array_like 
         Eccentricity (unity)
 
     Returns
     -------
-    M: array_like
+    M : array_like
         Mean anomaly (radians)
 
     Notes
@@ -437,16 +446,16 @@ def keplernu(nu, ecc):
         
     Parameters
     ----------
-    nu: array_like
+    nu : array_like
         True anomaly (radians)
-    ecc: array_like 
+    ecc : array_like 
         Eccentricity (unity)
 
     Returns
     -------
-    M: array_like
+    M : array_like
         Mean anomaly (radians)
-    E: array_like
+    E : array_like
         Eccentric anomaly (radians) 
 
     Notes
@@ -477,18 +486,18 @@ def keplerm(M, ecc, TOL=1e-10):
     
     Parameters
     ----------
-    M: array_like
+    M : array_like
         Mean anomaly (radians)
-    ecc: array_like 
+    ecc : array_like 
         Eccentricity (unity)
-    tol: float, default 1e-10
+    tol : float, default 1e-10
         Stop criterion for iterations
 
     Returns
     -------
-    E: array_like
+    E : array_like
         Eccentric anomaly (radians) 
-    nu: array_like
+    nu : array_like
         True anomaly (radians)
 
     Notes
@@ -534,17 +543,17 @@ def ut2gmst(ut1, model="IAU-82"):
     
     Parameters
     ----------
-    ut1: array_like, float64 or datetime64 or str
+    ut1 : array_like, float64 or datetime64 or str
         Universal time datetime64 object, numpy parsable datetime string, or
         matplotlib sequential datenumber (days since '01-Jan-1970')
-    model: {'IAU-82', 'APPROXIMATE'}, optional
+    model : {'IAU-82', 'APPROXIMATE'}, optional
         Model for `ut` to `gmst` conversion. Default is 'IAU-82' model.
 
     Returns
     -------
-    gmst: array_like
+    gmst : array_like
         Greenwich Mean Siderial Time GMST [0-2pi rad] for UT1 (radians)
-    omegae: float
+    omegae : float
         Rotation rate of the Earth (rev/day)
     
     See Also
@@ -621,36 +630,36 @@ def ecef2eci(t, xsate, vsate=[]):
     
     Parameters
     ----------
-    t: array_like with shape (n,) or scalar, of type datetime64, str or float
+    t : array_like with shape (n,) or scalar, of type datetime64, str or float
         Universal time as `datetime64` object, ISO date string or sequential date 
         number (days since 1970-01-01).
-    xsate: array_like with shape (...,n,3) or (...,n,6), or, shape (3,) or (6,) 
+    xsate : array_like with shape (...,n,3) or (...,n,6), or, shape (3,) or (6,) 
         Array with Cartesian coordinates (m) or state vector with positions (m) 
         and velocities (m/s) in an ECEF reference frame .
-    vsate: array_like with shape (...,n,3), optional
+    vsate : array_like with shape (...,n,3), optional
         Array with velocities in ECEF reference frame (m/s). If empty, velocities
         are taken from 'xsate[...,3:6]', or if `xsate` has shape (...,n,3) or (3,)
         velocities are assumed to be zero (e.g. non-moving points on the Earth surface)  
 
     Returns
     -------
-    xsat: ndarray with shape (...,n,3) or shape (...,n,6) 
+    xsat : ndarray with shape (...,n,3) or shape (...,n,6) 
         Array with Cartesian coordinates (m) or state vector with positions (m) 
         and velocities (m/s) in ECI reference frame. 
-    vsat: ndarray with shape (...,n,3), optional
+    vsat : ndarray with shape (...,n,3), optional
         Array with velocities in ECI reference frame (m/s), only if `xsat` is not
         a state vector.
 
+    Notes
+    -----    
     The function returns a single ndarray `xsat` with the ECI state vector when the 
     parameter `xsate` is a state vector (having 6 elements). Otherwise, it returns 
     two ndarrays.
-
-    The function returns ndarrays with at least two dimensions.
-
-    Notes
-    -----
+    
     If the parameter `xsate` has shape (3,) or (...,1,3), and parameter `t` has shape
     (n,) with 'n > 1', then `xsate` is extended to match the length of `t`.
+    
+    The function always returns ndarrays with at least two dimensions.
     
     See Also
     --------
@@ -816,26 +825,28 @@ def eci2ecef(t, xsat, vsat=[]):
     
     Parameters
     ----------
-    t: array_like with shape (n,) or scalar, of type datetime64, str or float
+    t : array_like with shape (n,) or scalar, of type datetime64, str or float
         Universal time as `datetime64` object, ISO date string or sequential date 
         number (days since 1970-01-01).
-    xsat: array_like with shape (...,n,3) or (...,n,6) 
+    xsat : array_like with shape (...,n,3) or (...,n,6) 
         Array with Cartesian coordinates (m) or state vector with positions (m) 
         and velocities (m/s) in an ECI reference frame .
-    vsat: array_like with shape (...,n,3), optional
+    vsat : array_like with shape (...,n,3), optional
         Array with velocities in ECI reference frame (m/s). If empty, velocities
         are assumed to be part of the state vector 'xsat[...,3:6]', or if `xsat` 
         has shape (...,3), ``xsate = eci2ecef(t, xsat)`` only returns the positions.
 
     Returns
     -------
-    xsate: ndarray with shape (...,n,3) or shape (...,n,6)
+    xsate : ndarray with shape (...,n,3) or shape (...,n,6)
         Array with Cartesian coordinates (m) or state vector with positions (m) 
         and velocities (m/s) in ECEF reference frame. 
-    vsate: ndarray with shape (...,n,3), optional
+    vsate : ndarray with shape (...,n,3), optional
         Array with velocities in ECEF reference frame (m/s), only if the input
         parameter `vsat` is not empty.
 
+    Notes
+    -----
     The function returns a single ndarray `xsate` with the ECEF state vector when the 
     parameters `xsat` are a state vector (having 6 elements) and `vsat` is empty. When
     `vsat` is not empty, the function returns two ndarrays.
@@ -987,48 +998,52 @@ def satlookangle(t, xsat, xobj, verbose=0, swathdef=['VIS', 0, 80, ''], ellips=[
     
     Compute a table with lookangles
     
-        - zenith and azimuth angles to satellite for an object on the Earth or in space,
-        - off-nadir and azimuth angle from satellite to object, the lookangle to the object
-          with resepect to the direction of flight of the satellite, and the heading of
-          angle of the satellite 
-        - range and range-rate between object and satellite
+    - zenith and azimuth angles to satellite for an object on the Earth or in space,
+    - off-nadir and azimuth angle from satellite to object, the lookangle to the object
+      with resepect to the direction of flight of the satellite, and the heading of
+      angle of the satellite 
+    - range and range-rate between object and satellite
 
     and flags for visibility, ascending/descending orbit, right/left looking, etc.  
     
     Parameters
     ----------
-    t: array_like with shape (n,) or scalar, of type datetime64, str or float
+    t : array_like with shape (n,) or scalar, of type datetime64, str or float
         Universal time as `datetime64` object, ISO date string or sequential date 
         number (days since 1970-01-01).
-    xsat: array_like with shape (...,n,6) 
+    xsat : array_like with shape (...,n,6) 
         Array with satellite state vector with positions (m) and velocities (m/s) 
         in ECEF or ECI reference frame. 
-    xobj: array_like with shape (3,), (...,n,3) or (...,n,6)  
+    xobj : array_like with shape (3,), (...,n,3) or (...,n,6)
         Array with the position of the object for which the lookangles are to be
         computed. `xobj` is either an array of shape (3,) or (...,n,3) with position(s)
         in the ECEF reference frame, or an array with shape (...,n,6) for statevectors
         with position and velocity in an ECEF or ECI referenence frame. `xobj`  and 
-       `xsat` must always be in the same reference frame.
-    ellips: list of bool, optional       
+        `xsat` must always be in the same reference frame.
+    ellips : list of bool, optional       
         Choice between ellipsoidal or spherical angles for viewing from respectively
         object and satellite. True means using ellipsoidal angles. Default is [true, false]
-    swathdef: list, optional        
+    swathdef : list, optional        
         Swathdef is a list with four items defining when a satellite is visible. The
         list consists of a label, the incidence angle range, and the look direction 
-        (right look'RL', left look 'LL' or both ''). Examples are::
+        (right look'RL', left look 'LL' or both ''). 
+        Example for SENTINEL-1, with swath names, minimum and maximum incidence
+        angle, right looking 
+         
+        >>> swathdef=[['IW1', 29.16, 36.59, 'RL' ],  
+        ...            'IW2', 34.77, 41.85, 'RL' ],  
+        ...            'IW3', 40.04, 46.00, 'RL' ]]
+                                                                               
+        Default is a 10 deg elevation mask
 
-            swathdef= ['VIS', 0.00, 80.00, '']       # Default with 10 deg elevation mask
- 
-            swathdef=[['IW1', 29.16, 36.59, 'RL' ],  # Example for SENTINEL-1, with
-                       'IW2', 34.77, 41.85, 'RL' ],  # swath name, minimum and maximum
-                       'IW3', 40.04, 46.00, 'RL' ]]  # incidence angle, only right looking    
+        >>> swathdef= ['VIS', 0.00, 80.00, '']
 
-    verbose: int, optional    
+    verbose : int, optional    
         Verbosity level, possible values are 0 or 1  (default is 0)
 
     Returns
     -------
-    lookangles: ndarray of floats with shape (...,n,8)
+    lookangles : ndarray of floats with shape (...,n,8)
         Array with the angles (rad), range (m) and range-rate (m/s)::   
 
             0  incidence angle at the object, which is identical to the zenith angle,
@@ -1041,10 +1056,10 @@ def satlookangle(t, xsat, xobj, verbose=0, swathdef=['VIS', 0, 80, ''], ellips=[
             6  range between satellite and object
             7  range rate in the line of sight
 
-    flags: ndarray of str_ with shape (...,n,3)
-        Array with in the first column a ascending/descending flag ['ASC'|'DSC'], 
-        in the 2nd column the left- or right-looking flag ['LL'|'RL'], and in the
-        third column the visibility flag ['VIS|''|<swath>], whereby the swath name 
+    flags : ndarray of str with shape (...,n,3)
+        Array with in the first column a ascending/descending flag ``['ASC'|'DSC']``, 
+        in the 2nd column the left- or right-looking flag ``['LL'|'RL']``, and in the
+        third column the visibility flag ``['VIS|''|<swath>]``, whereby the swath name 
         can be set by the optional `swathdef` parameter.
 
     Notes
@@ -1215,10 +1230,10 @@ def prtlookangle(t, lookangles, flags, titlestr='', tableformat='default'):
     
     Parameters
     ----------
-    t: array_like with shape (n,) or scalar, of type datetime64, str or float
+    t : array_like with shape (n,) or scalar, of type datetime64, str or float
         Universal time as `datetime64` object, ISO date string or sequential date 
         number (days since 1970-01-01).
-    lookangles: array_like, floats, with shape (...,n,8)
+    lookangles : array_like of floats with shape (...,n,8)
         Array with the angles (rad), range (m) and range-rate (m/s)::   
 
             0  incidence angle at the object, which is identical to the zenith angle,
@@ -1231,14 +1246,14 @@ def prtlookangle(t, lookangles, flags, titlestr='', tableformat='default'):
             6  range between satellite and object
             7  range rate in the line of sight
 
-    flags: array_like, str_, with shape (...,n,3)
-        Array with in the first column a ascending/descending flag ['ASC'|'DSC'], 
-        in the 2nd column the left- or right-looking flag ['LL'|'RL'], and in the
-        third column the visibility flag ['VIS|''|<swath>].
-    titlestr: string or list of strings, optional
+    flags : array_like of str with shape (...,n,3)
+        Array with in the first column a ascending/descending flag ``['ASC'|'DSC']``, 
+        in the 2nd column the left- or right-looking flag ``['LL'|'RL']``, and in the
+        third column the visibility flag ``['VIS|''|<swath>]``.
+    titlestr : str or list of str, optional
         Title string. Use a list for 3- or more dimensional cases of `lookangles`,
         with shape matching dimensions above 2. 
-    tableformat:  {'default', 'ers'}, optional
+    tableformat :  {'default', 'ers'}, optional
         Table format. The 'default' is 'ers'.
 
     See Also 

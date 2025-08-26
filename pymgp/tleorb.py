@@ -1,5 +1,5 @@
 """
-Two-Line Element (TLE) orbits
+Two-Line Element (TLE) orbits.
 
 Compute satellite position and velocity using two-line elements available from
 Celestrak (https://celestrak.org).
@@ -35,7 +35,7 @@ plotting purposes and planning computations. The SGP4 and SDP4 methods are
 not implemented, anyway, for precise orbits the user should resort to other
 sources for satellite orbits  
 
-See also
+See Also
 --------
 satorb:
     Satellite orbit module (used by this module)
@@ -93,6 +93,15 @@ References
 Copyright Hans van der Marel, Delft University of Technology, 2012-2024
 """
 
+__author__ = "Hans van der Marel"
+__copyright__ = "Copyright 2012-2024, Hans van der Marel, Delft University of Technology."
+__credits__ = ["Hans van der Marel", "Simon van Diepen"]
+__license__ = "License Name and Info"
+__version__ = "0.9.0"
+__maintainer__ = "Hans van der Marel"
+__email__ = "h.vandermarel@tudelft.nl"
+__status__ = "development"
+
 """
 Created:    30 Dec 2012 by Hans van der Marel for Matlab
 Modified:   13 Sep 2017 by Hans van der Marel for Matlab
@@ -115,7 +124,9 @@ Modified:   13 Sep 2017 by Hans van der Marel for Matlab
              - many new examples and documentation improvements
              5 Aug 2024 by Hans van der Marel
              - New function tleprint added
-                                             
+            22 Aug 2024 by Hans van der Marel
+             - Major edits to the docstrings to facilitate sphynx
+                                            
 Based on code originally developed for Matlab(TM) in 2010-2016 by the author.
 
 Copyright Hans van der Marel, Delft University of Technology, 2012-2024
@@ -145,20 +156,20 @@ def tleget(tleset, tlefile=""):
 
     Parameters
     ----------
-    tleset: array_like, list of strings, string
+    tleset : array_like, list of strings, string
         String, list of strings, or ndarray with the name(s) of the two line 
         element set(s). This can be the name of a file on Celestrak, or, a 
         family of satellites. Common sets of two line elements are 'GPS' 
         ('gps-ops'), 'GLONASS' ('glo-ops'), 'GALILEO', 'BEIDOU', 'SBAS'; 'GNSS' 
         or 'SATNAV' to do all satellite navigation systems; 'resource' for Earth 
         resource satellites, etc. For a full list see the Celestrak website.
-    tlefile: string, optional
+    tlefile : string, optional
         Name of local file to save the two-line elements to. Default is the
         filename on Celestrak or the set name.
 
     Returns
     -------
-    tlefile: string 
+    tlefile : string 
         Name of the local file with two-line elements.
 
     Notes
@@ -169,7 +180,7 @@ def tleget(tleset, tlefile=""):
     compatible with the SGP4 and SDP4 orbit propagators of NORAD. The 
     two line elements are read with the `tleread()` function.
 
-    See also
+    See Also
     --------
     tleread, tle2vec
     
@@ -262,15 +273,15 @@ def tleread(tlefile, verbose=1):
 
     Parameters
     ----------
-    tlefile: string
+    tlefile : string
         Name of the file with two-line elements.
-    verbose: int, optional
+    verbose : int, optional
         Verbosity level. If 'verbose=1' (default) an overview of the TLE's is 
         printed, if 'verbose=0' the function is quiet.
 
     Returns
     -------
-    tle: list of named tuples
+    tle : list of named tuples
         List with two line elements.
 
     Notes
@@ -285,7 +296,7 @@ def tleread(tlefile, verbose=1):
     with a twenty-four character name before the traditional Two Line Element 
     format (Three-Line Elemement Set).
     
-    See also
+    See Also
     --------
     tleget, tle2vec, tlefind, tledatenum, tle2orb
     
@@ -513,10 +524,10 @@ def tleprint(tle):
 
     Parameters
     ----------
-    tle: list of named tuples
+    tle : list of named tuples
         List with two line elements.
     
-    See also
+    See Also
     --------
     tleget, tleread
     
@@ -569,21 +580,21 @@ def tlefind(tle, satid, verbose=1):
     
     Parameters
     ----------
-    tle: list of named tuples
+    tle : list of named tuples
         List of named tuples with two-line elements.
-    satid: str, int, array_like with int or str
+    satid : str, int, array_like of int or str
         String or array with the satellite names to look for, an index, or index
         array. For strings, the functions looks for satellites that start with
         `satid`.
-    verbose: int, optional
+    verbose : int, optional
         Verbosity level. If 'verbose=1' (default) print a message for the found
         TLE(s), if 'verbose=0' the function is quiet.
     
     Returns
     -------
-    isat: ndarray, int64
+    isat : ndarray, int64
         Array with element numbers in the list of named tuples `tle`
-    satids: ndarray, str_
+    satids : ndarray, str
         Array with satellite names that have been found
     
     Notes
@@ -592,7 +603,7 @@ def tlefind(tle, satid, verbose=1):
     previous function call and should return the same result (on the same set
     of TLE)
     
-    See also
+    See Also
     --------
     tleget, tleread, tle2vec, tledatenum
 
@@ -666,24 +677,26 @@ def tlefind(tle, satid, verbose=1):
 
 
 def tledatenum(daterange):
-    """Compute datenumber range from start date, end date and interval 
+    """Compute datenumber range from start date, end date and interval.
 
     Parameters
     ----------
-    daterange: string, list, array_like with string, float or datetime64
-        The `daterange` is either:           
-          - three element list with start date, end date (or duration in minutes) 
-            and data interval in minutes, 
-          - string with the date or a list with date strings, or,
-          - ndarray with serial datenumbers, datestrings, or datetime64 
+    daterange : string, list, array_like with string, float or datetime64
+        The `daterange` is either:
+            
+            - three element list with start date, end date (or duration in minutes) 
+              and data interval in minutes, 
+            - string with the date or a list with date strings, or,
+            - ndarray with serial datenumbers, datestrings, or datetime64 
+        
         The function return of a previous call is a valid input. 
        
     Returns
     -------
-    t: ndarray, float64
+    t : ndarray, float64
         Array with serial datenumbers (days since 1-1-1970)    
     
-    See also
+    See Also
     --------
     tleget, tleread, tle2vec, tlefind
     
@@ -754,32 +767,29 @@ def tle2orb(tle, t, propagation="J2"):
     
     Parameters
     ----------
-    tle: named tuple
+    tle : named tuple
         Named tuple with two line elements for a single satellite 
-    t: array_like, float, with shape (n,)
-         Array with serial date numbers in UT1.
-    propagation: {'J2', 'NOJ2', 'SGP4'}, optional
-        Propagation method to for the orbital elements:
+    t : array_like, float, with shape (n,)
+        Array with serial date numbers in UT1.
+    propagation : {'J2', 'NOJ2', 'SGP4'}, optional
+        Propagation method to for the orbital elements::
             
             J2    Include secular effects of J2, but nothing else (default). This gives
                   acceptable results for plotting purposes and planning computations
             NOJ2  Ignores effect of J2 on orbit propagation. Should only be used for 
                   educational purposes
             SGP4  SGP4 orbit propagator of NORAD. Not implemented yet
-        
+    
     Returns
     -------
-    orb: ndarray with shape (n,6)
+    orb : ndarray with shape (n,6)
         Array with rows of orbital elements '[semi-major axis (m), eccentricity (-),
         inclination (rad), right ascension of ascending node (rad), argument of 
         periapsis (rad]) and true anomaly (rad)]' at time 't[i]'. 
     
-    See also
+    See Also
     --------
     tleget, tleread, tle2vec
-    
-    Examples
-    --------
     
     
     """
@@ -849,20 +859,22 @@ def tle2vec(tle, t, satid, propagation="J2", verbose=0):
     
     Parameters
     ----------
-    tle: list with named tuples
+    tle : list with named tuples
         List with two line elements as named tuples as return by `tleread`.
-    t: array_like, float, with shape (n,)
+    t : array_like, float, with shape (n,)
         Array with serial date numbers in UT1 or date range as used by `tledatenum`. 
         Valid inputs are:
-          - three element list with start date, end date (or duration in minutes) 
-            and data interval in minutes, 
-          - string with the date or a list with date strings, or,
-          - ndarray with serial datenumbers, datestrings, or datetime64 
-    satid: str, int, array_like with int or str
+            
+            - three element list with start date, end date (or duration in minutes) 
+              and data interval in minutes, 
+            - string with the date or a list with date strings, or,
+            - ndarray with serial datenumbers, datestrings, or datetime64 
+            
+    satid : str, int, array_like with int or str
         String or array with the satellite names, index or index array. For strings, 
         satellites are selected that start with `satid`. Uses `tlefind` to resolve
         the satellite identifiers.
-    propagation: {'J2', 'NOJ2', 'SGP4'}, optional
+    propagation : {'J2', 'NOJ2', 'SGP4'}, optional
         Propagation method to for the orbital elements::
             
             J2    Include secular effects of J2, but nothing else (default). This gives
@@ -871,19 +883,19 @@ def tle2vec(tle, t, satid, propagation="J2", verbose=0):
                   educational purposes
             SGP4  SGP4 orbit propagator of NORAD. Not implemented yet.
             
-    verbose: int, optional
+    verbose : int, optional
         Verbosity level. If 'verbose=1' (default) print a message for the found
         TLE(s), if 'verbose=0' the function is quiet.
     
     Returns
     -------
-    xsat, vsat: ndarray with shape (n,3) each
+    xsat, vsat : ndarray with shape (n,3) each
         The satellite position (m) and velocity (m/s) in an ECI reference
         frame. The second to last axis is time t, the last axis are the 
         coordinates X, Y and Z, respectively velocities VX, VY and VZ.
-    t: array_like, float, with shape (n,)
+    t : array_like, float, with shape (n,)
         Array with serial date numbers in UT1.
-    satids: array_like, str_
+    satids : array_like, str
         Array with the satellite names.
 
     Notes
@@ -896,7 +908,7 @@ def tle2vec(tle, t, satid, propagation="J2", verbose=0):
     of J2 on the orbit propagation and should only be used for educational 
     purposes.
 
-    See also
+    See Also
     --------
     tleget, tleread, tledatenum, tlefind, tle2orb
     
