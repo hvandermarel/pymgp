@@ -6,6 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../'))
+
 project = 'pyMGP'
 copyright = '2025, Hans van der Marel'
 author = 'Hans van der Marel'
