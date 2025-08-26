@@ -1,0 +1,37 @@
+.. _reference:
+
+API reference
+=============
+
+:Date: |today|
+
+This reference manual details functions, modules, and objects
+included in MGPlib, describing what they are and what they do.
+
+Routines and objects by topic
+-----------------------------
+
+This is a listing of functionality grouped by topic. It is meant to 
+give the user guidance when looking for functionality. 
+
+.. toctree::
+   :maxdepth: 2
+
+   reference/mgplib
+
+
+Routines and objects by module
+------------------------------
+
+Per-module function and object listings.
+
+.. autosummary::
+   :recursive:
+   :template: custom-module-template.rst
+   :toctree: generated
+
+   mgplib
+   
+   
+.. _routines:
+
