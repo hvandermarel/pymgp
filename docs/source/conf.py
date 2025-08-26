@@ -6,9 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
+from pathlib import Path
+
+sys.path.insert(0, str(Path('..', '..').resolve()))
 
 project = 'pyMGP'
 copyright = '2025, Hans van der Marel'
@@ -45,4 +46,4 @@ html_static_path = ['_static']
 
 html_show_sourcelink = False
 
-autodoc_mock_imports = ["numpy", "pymgp"]
+# autodoc_mock_imports = ["matplotlib", "scipy", "datetime", "collections", "urllib", "ssl", "dateutil"]
