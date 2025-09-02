@@ -4,6 +4,7 @@ Collection of Python modules for GNSS Positioning and Geodesy.
 
 ## Description
 
+A description of the modules can be found on [Gitlab pages](https://hvandermarel.github.io/pymgp/index.html).
 
 
 ## Installation
@@ -35,6 +36,8 @@ pip uninstall pymgp
 ```
 
 ## Updating documentation
+
+Provisional, nor for users, move to its own document...
 
 ### One time initialization
 
