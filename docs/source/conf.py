@@ -45,5 +45,7 @@ html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 
 html_show_sourcelink = False
+nbsphinx_allow_errors = True
+nbsphinx_execute = 'never'
 
 # autodoc_mock_imports = ["scipy", "datetime", "urllib", "ssl", "dateutil"]
