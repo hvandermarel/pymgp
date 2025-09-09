@@ -11,10 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - name: Install pandoc
-        with:
-          pre-build-command: "apt install -y pandoc"
-        uses: ammaraskar/sphinx-action@0.4
       - name: Install dependencies
         run: |
           pip install sphinx pydata_sphinx_theme numpydoc nbsphinx myst_parser numpy matplotlib scipy pandoc
@@ -30,4 +26,5 @@ jobs:
           publish_dir: docs/build/
 
           force_orphan: true
+
 
