@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Two-Line Element (TLE) orbits(pymgp.tleorb) &#8212; pyMGP 0.9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=049aceee"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/tleorb';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pymgp.tleorb.tleget" href="generated/pymgp.tleorb.tleget.html" />
+    <link rel="prev" title="pymgp.satorb.num2datetime64" href="generated/pymgp.satorb.num2datetime64.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyMGP 0.9 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../usage.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="crstrans.html">Coordinate conversions and transformations (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.crstrans</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.xyz2plh.html">pymgp.crstrans.xyz2plh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.plh2xyz.html">pymgp.crstrans.plh2xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.inqell.html">pymgp.crstrans.inqell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.setell.html">pymgp.crstrans.setell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.ellcurvature.html">pymgp.crstrans.ellcurvature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.xyz2neu.html">pymgp.crstrans.xyz2neu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.neu2xyz.html">pymgp.crstrans.neu2xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.xyz2zas.html">pymgp.crstrans.xyz2zas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.zas2xyz.html">pymgp.crstrans.zas2xyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.ellnormal.html">pymgp.crstrans.ellnormal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.ellrotmatrix.html">pymgp.crstrans.ellrotmatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.covtransform.html">pymgp.crstrans.covtransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.printcrd.html">pymgp.crstrans.printcrd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.printxyz.html">pymgp.crstrans.printxyz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.printplh.html">pymgp.crstrans.printplh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.crstrans.deg2dms.html">pymgp.crstrans.deg2dms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="satorb.html">Satellite orbits (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.satorb</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.vec2orb.html">pymgp.satorb.vec2orb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.orb2vec.html">pymgp.satorb.orb2vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.orbtype.html">pymgp.satorb.orbtype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.kepler.html">pymgp.satorb.kepler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.keplerm.html">pymgp.satorb.keplerm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.keplernu.html">pymgp.satorb.keplernu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.ut2gmst.html">pymgp.satorb.ut2gmst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.ecef2eci.html">pymgp.satorb.ecef2eci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.eci2ecef.html">pymgp.satorb.eci2ecef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.satlookangle.html">pymgp.satorb.satlookangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.prtlookangle.html">pymgp.satorb.prtlookangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.datetime2num.html">pymgp.satorb.datetime2num</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.num2datetime.html">pymgp.satorb.num2datetime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.satorb.num2datetime64.html">pymgp.satorb.num2datetime64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Two-Line Element (TLE) orbits(<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.tleorb</span></code>)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tleget.html">pymgp.tleorb.tleget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tleread.html">pymgp.tleorb.tleread</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tleprint.html">pymgp.tleorb.tleprint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tlefind.html">pymgp.tleorb.tlefind</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tledatenum.html">pymgp.tleorb.tledatenum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tle2orb.html">pymgp.tleorb.tle2orb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.tleorb.tle2vec.html">pymgp.tleorb.tle2vec</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="orbplot.html">Satellite orbit and visibility plots (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.orbplot</span></code>)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.pltposvel.html">pymgp.orbplot.pltposvel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.pltsattrack.html">pymgp.orbplot.pltsattrack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.pltgroundtrack.html">pymgp.orbplot.pltgroundtrack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.pltsatview.html">pymgp.orbplot.pltsatview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.skyplot.html">pymgp.orbplot.skyplot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.plt3dorbit.html">pymgp.orbplot.plt3dorbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.plot_orbit_3D.html">pymgp.orbplot.plot_orbit_3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.rewrap.html">pymgp.orbplot.rewrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.rewrap2d.html">pymgp.orbplot.rewrap2d</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.xlabels.html">pymgp.orbplot.xlabels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.plh2ecef.html">pymgp.orbplot.plh2ecef</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.plh2eci.html">pymgp.orbplot.plh2eci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.ecef2plh.html">pymgp.orbplot.ecef2plh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.obj2sat.html">pymgp.orbplot.obj2sat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.xyz2radec.html">pymgp.orbplot.xyz2radec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.xyz2zassp.html">pymgp.orbplot.xyz2zassp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pymgp.orbplot.ra2lon.html">pymgp.orbplot.ra2lon</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Two-Line Element (TLE) orbits(<code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.tleorb</span></code>)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="two-line-element-tle-orbits-pymgp-tleorb">
+<span id="module-pymgp.tleorb"></span><h1>Two-Line Element (TLE) orbits(<a class="reference internal" href="#module-pymgp.tleorb" title="pymgp.tleorb"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pymgp.tleorb</span></code></a>)<a class="headerlink" href="#two-line-element-tle-orbits-pymgp-tleorb" title="Link to this heading">#</a></h1>
+<p>Compute satellite position and velocity using two-line elements available from
+Celestrak (<a class="reference external" href="https://celestrak.org">https://celestrak.org</a>).</p>
+<section id="get-and-read-norad-two-line-elements-in-tle-structure-array">
+<h2>Get and read NORAD Two Line Elements in TLE structure array<a class="headerlink" href="#get-and-read-norad-two-line-elements-in-tle-structure-array" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tleget.html#pymgp.tleorb.tleget" title="pymgp.tleorb.tleget"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tleget</span></code></a>(tleset[, tlefile])</p></td>
+<td><p>Retrieve NORAD Two Line Elements from www.celestrak.com.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tleread.html#pymgp.tleorb.tleread" title="pymgp.tleorb.tleread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tleread</span></code></a>(tlefile[, verbose])</p></td>
+<td><p>Read NORAD Two Line Elements from file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tleprint.html#pymgp.tleorb.tleprint" title="pymgp.tleorb.tleprint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tleprint</span></code></a>(tle)</p></td>
+<td><p>Print NORAD Two Line Elements.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="find-satellites-and-select-dates">
+<h2>Find satellites and select dates<a class="headerlink" href="#find-satellites-and-select-dates" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tlefind.html#pymgp.tleorb.tlefind" title="pymgp.tleorb.tlefind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tlefind</span></code></a>(tle, satid[, verbose])</p></td>
+<td><p>Find named satellites in the NORAD Two Line Elements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tledatenum.html#pymgp.tleorb.tledatenum" title="pymgp.tleorb.tledatenum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tledatenum</span></code></a>(daterange)</p></td>
+<td><p>Compute datenumber range from start date, end date and interval.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="compute-satellite-positions-and-orbit-propagation">
+<h2>Compute satellite positions and orbit propagation<a class="headerlink" href="#compute-satellite-positions-and-orbit-propagation" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tle2orb.html#pymgp.tleorb.tle2orb" title="pymgp.tleorb.tle2orb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tle2orb</span></code></a>(tle, t[, propagation])</p></td>
+<td><p>Compute satellite orbital elements from NORAD Two Line Elements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pymgp.tleorb.tle2vec.html#pymgp.tleorb.tle2vec" title="pymgp.tleorb.tle2vec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tle2vec</span></code></a>(tle, t, satid[, propagation, verbose])</p></td>
+<td><p>Compute satellite position and velocity in ECI from NORAD Two Line Elements.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The functions are optimized for Python’s numpy library, it accepts mostly numpy
+alike ndarrays with the coordinates (usually three) in the last axis.</p>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<p>The mean orbital elements in the two-line elements are Earth-centered-inertial
+(ECI) coordinates with respect to the true equator of date and the mean equinox
+of date. They do not include the effect of nutation. The tle’s are compatible
+with the SGP4 and SDP4 orbit propagators of NORAD.</p>
+<p>The default orbit propagator used by this module is a simplified method that
+only includes the secular effects of J2. This gives acceptable results for
+plotting purposes and planning computations. The SGP4 and SDP4 methods are
+not implemented, anyway, for precise orbits the user should resort to other
+sources for satellite orbits</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>pymgp.satorb:</dt><dd><p>Satellite orbit module (used by this module)</p>
+</dd>
+<dt>pymgp.orbplot:</dt><dd><p>Plotting of satellite orbits (relies on this module)</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<p>Download tle data for Earth Resource Satellites</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tlefile</span> <span class="o">=</span> <span class="n">tleget</span><span class="p">(</span><span class="s1">&#39;resource&#39;</span><span class="p">)</span>
+<span class="go">Saving TLE set to default name</span>
+<span class="go">TLEGET: Downloaded resource.txt from http://celestrak.com/NORAD/elements/</span>
+<span class="go">Saved TLE to resource.txt</span>
+</pre></div>
+</div>
+<p>Read tle data for Earth Resource Satellites from file (file downloaded on Aug 2, 2024) and
+compute the position and velocity of RADARSAT-2</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tleERS</span> <span class="o">=</span> <span class="n">tleread</span><span class="p">(</span><span class="s1">&#39;resource-20240802.tle&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xsat</span><span class="p">,</span> <span class="n">vsat</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">tle2vec</span><span class="p">(</span><span class="n">tleERS</span><span class="p">,</span><span class="s1">&#39;2024-08-02 05:58:10&#39;</span><span class="p">,</span><span class="s1">&#39;RADARSAT-2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xsat</span><span class="p">,</span> <span class="n">vsat</span><span class="p">)</span>
+<span class="go">[[5458404.60763595 4591181.8357549  -732126.12944127]] [[  144.29836955 -1339.50959494 -7333.2677589 ]]</span>
+</pre></div>
+</div>
+<p>Compute RADARSAT-2 position and velocities for Aug 2, 2024, with one minute intervals</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xsat</span><span class="p">,</span> <span class="n">vsat</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">tle2vec</span><span class="p">(</span><span class="n">tleERS</span><span class="p">,[</span><span class="s1">&#39;2024-08-02 0:00&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span><span class="s1">&#39;RADARSAT-2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xsat</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">vsat</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">(1441, 3) (1441, 3) (1441,)</span>
+</pre></div>
+</div>
+<p>Position and velocity, on Aug 2, 2024, for every SENTINEL satellite, with one minute interval</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xsat</span><span class="p">,</span> <span class="n">vsat</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">satids</span> <span class="o">=</span> <span class="n">tle2vec</span><span class="p">(</span><span class="n">tleERS</span><span class="p">,[</span><span class="s1">&#39;2024-08-02 0:00&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span><span class="s1">&#39;SENTINEL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">xsat</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">vsat</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">satids</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">satids</span><span class="p">)</span>
+<span class="go">(7, 1441, 3) (7, 1441, 3) (1441,) (7,)</span>
+<span class="go">[&#39;SENTINEL-1A&#39; &#39;SENTINEL-2A&#39; &#39;SENTINEL-3A&#39; &#39;SENTINEL-2B&#39; &#39;SENTINEL-5P&#39;</span>
+<span class="go"> &#39;SENTINEL-3B&#39; &#39;SENTINEL-6&#39;]</span>
+</pre></div>
+</div>
+<p>Find satellites and set date range and interval (used for instance by tle2vec)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">isat</span><span class="p">,</span> <span class="n">satids</span> <span class="o">=</span> <span class="n">tlefind</span><span class="p">(</span><span class="n">tleERS</span><span class="p">,</span> <span class="s1">&#39;SENTINEL&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">print(isat, satids)</span>
+<span class="go">[ 65  87  99 116 122 133 148] [&#39;SENTINEL-1A&#39; &#39;SENTINEL-2A&#39; &#39;SENTINEL-3A&#39; &#39;SENTINEL-2B&#39; &#39;SENTINEL-5P&#39;</span>
+<span class="go"> &#39;SENTINEL-3B&#39; &#39;SENTINEL-6&#39;]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">tledatenum</span><span class="p">([</span><span class="s1">&#39;2024-08-02 0:00&#39;</span><span class="p">,</span> <span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="go">(1441,)</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Celestrak web-site (<a class="reference external" href="https://celestrak.org">https://celestrak.org</a>)</p></li>
+<li><p>NORAD GP Element Sets Current Data (<a class="reference external" href="https://celestrak.org/NORAD/elements/">https://celestrak.org/NORAD/elements/</a>)</p></li>
+</ul>
+<p>Copyright Hans van der Marel, Delft University of Technology, 2012-2024</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="generated/pymgp.satorb.num2datetime64.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pymgp.satorb.num2datetime64</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="generated/pymgp.tleorb.tleget.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pymgp.tleorb.tleget</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-and-read-norad-two-line-elements-in-tle-structure-array">Get and read NORAD Two Line Elements in TLE structure array</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#find-satellites-and-select-dates">Find satellites and select dates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-satellite-positions-and-orbit-propagation">Compute satellite positions and orbit propagation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Hans van der Marel.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
