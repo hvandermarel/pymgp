@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '3.1.11' # The pandoc version to download (if necessary) and use.
       - name: Install dependencies
         run: |
           pip install sphinx pydata_sphinx_theme numpydoc nbsphinx myst_parser numpy matplotlib scipy pandoc
@@ -26,5 +29,6 @@ jobs:
           publish_dir: docs/build/
 
           force_orphan: true
+
 
 
