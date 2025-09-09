@@ -11,9 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+      - name: Install pandoc
+        with:
+          pre-build-command: "apt install -y pandoc"
       - name: Install dependencies
         run: |
-          apt install -y pandoc |
           pip install sphinx pydata_sphinx_theme numpydoc nbsphinx myst_parser numpy matplotlib scipy pandoc
       - name: Sphinx build
         run: |
@@ -25,4 +27,5 @@ jobs:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/
+
           force_orphan: true
